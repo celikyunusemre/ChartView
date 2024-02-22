@@ -80,7 +80,7 @@ public struct BarChartView : View {
                             accentColor: self.colorScheme == .dark ? self.darkModeStyle.accentColor : self.style.accentColor,
                             gradient: self.colorScheme == .dark ? self.darkModeStyle.gradientColor : self.style.gradientColor,
                             touchLocation: self.$touchLocation)
-                if self.legend != nil  && self.formSize == ChartForm.medium && !self.showLabelValue{
+                if self.legend != nil  && (self.formSize == ChartForm.medium || self.formSize == ChartForm.extraLarge) && !self.showLabelValue{
                     Text(self.legend!)
                         .font(.headline)
                         .foregroundColor(self.colorScheme == .dark ? self.darkModeStyle.legendTextColor : self.style.legendTextColor)
@@ -102,7 +102,7 @@ public struct BarChartView : View {
                     self.touchLocation = value.location.x/self.formSize.width
                     self.showValue = true
                     self.currentValue = self.getCurrentValue()?.1 ?? 0
-                    if(self.data.valuesGiven && self.formSize == ChartForm.medium) {
+                    if(self.data.valuesGiven && (self.formSize == ChartForm.medium || self.formSize == ChartForm.extraLarge)) {
                         self.showLabelValue = true
                     }
                 })
@@ -149,12 +149,11 @@ public struct BarChartView : View {
 }
 
 #if DEBUG
-struct ChartView_Previews : PreviewProvider {
-    static var previews: some View {
-        BarChartView(data: TestData.values ,
-                     title: "Model 3 sales",
-                     legend: "Quarterly",
-                     valueSpecifier: "%.0f")
-    }
+#Preview {
+    BarChartView(data: TestData.values ,
+                 title: "Model 3 sales",
+                 legend: "Quarterly",
+                 form: ChartForm.extraLarge,
+                 valueSpecifier: "%.0f")
 }
 #endif
